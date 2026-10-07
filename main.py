@@ -1,5 +1,7 @@
 """
-카카오 i 오픈빌더 스킬 서버 - 단톡방 지출 기록 봇
+지출 기록 서버
+- 웹 대시보드: /  (web.py, index.html)
+- 카카오 i 오픈빌더 스킬: /skill  (아래 코드)
 
 명령어
   !지출 8900원 음식 햄버거   → 지출 기록 (금액 / 카테고리 / 메모)
@@ -9,51 +11,19 @@
   !취소                      → 내 마지막 지출 기록 삭제
   !도움말
 """
-import os
 import re
-from datetime import datetime, timedelta, timezone
+from datetime import datetime
 
 from fastapi import FastAPI, Request
-from sqlalchemy import (
-    Column, DateTime, Integer, MetaData, String, Table, create_engine,
-    delete, desc, func, select,
-)
+from sqlalchemy import delete, desc, func, select
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlalchemy.dialects.sqlite import insert as sqlite_insert
 
-# ── DB ────────────────────────────────────────────────────────────
-# 로컬: SQLite / 배포: Supabase·Neon 등 Postgres URL을 DATABASE_URL에 넣으면 됨
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./expense.db")
-# Postgres 주소는 psycopg(v3) 드라이버를 쓰도록 스킴 통일
-for _old in ("postgres://", "postgresql://"):
-    if DATABASE_URL.startswith(_old):
-        DATABASE_URL = "postgresql+psycopg://" + DATABASE_URL[len(_old):]
+from db import KST, engine, expenses, nicknames
+import web
 
-engine = create_engine(DATABASE_URL, pool_pre_ping=True)
-meta = MetaData()
-
-expenses = Table(
-    "expenses", meta,
-    Column("id", Integer, primary_key=True, autoincrement=True),
-    Column("room_id", String(128), index=True, nullable=False),
-    Column("user_id", String(128), index=True, nullable=False),
-    Column("amount", Integer, nullable=False),
-    Column("category", String(50), nullable=False),
-    Column("memo", String(200), nullable=False, default=""),
-    Column("created_at", DateTime(timezone=True), nullable=False),
-)
-
-nicknames = Table(
-    "nicknames", meta,
-    Column("room_id", String(128), primary_key=True),
-    Column("user_id", String(128), primary_key=True),
-    Column("name", String(30), nullable=False),
-)
-
-meta.create_all(engine)
-
-KST = timezone(timedelta(hours=9))
 app = FastAPI()
+app.include_router(web.router)
 
 
 # ── 오픈빌더 요청/응답 헬퍼 ───────────────────────────────────────
@@ -258,6 +228,6 @@ async def skill(request: Request):
         return reply("앗, 처리 중 오류가 났어요. 잠시 후 다시 시도해 주세요.")
 
 
-@app.api_route("/", methods=["GET", "HEAD"])  # UptimeRobot 핑용 (HEAD 요청도 허용)
+@app.api_route("/health", methods=["GET", "HEAD"])
 def health():
     return {"ok": True}

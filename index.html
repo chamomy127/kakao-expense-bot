@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f6f5f2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#16171a" media="(prefers-color-scheme: dark)">
+<title>거지방</title>
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="apple-touch-icon" href="/icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="거지방">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="format-detection" content="telephone=no">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232f6fdb'/%3E%3Ctext x='16' y='22' font-size='17' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='700'%3E%E2%82%A9%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#f6f5f2; --surface:#ffffff; --surface-2:#f0efeb; --line:#e4e2dc;
+  --ink:#1c1d20; --ink-2:#55575d; --ink-3:#8a8c92;
+  --accent:#2f6fdb; --accent-soft:#e3ecfb; --accent-ink:#ffffff;
+  --bar:#2f6fdb; --bar-track:#eceae5;
+  --gold:#b8860b; --danger:#c2410c;
+  --radius:16px; --shadow:0 1px 2px rgba(0,0,0,.04),0 4px 16px rgba(0,0,0,.04);
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#16171a; --surface:#1f2024; --surface-2:#2a2b30; --line:#33353b;
+    --ink:#ececee; --ink-2:#b4b6bc; --ink-3:#83858c;
+    --accent:#6b9cf0; --accent-soft:#25324a; --accent-ink:#0f1420;
+    --bar:#6b9cf0; --bar-track:#2c2e34;
+    --gold:#e0b84a; --danger:#f08a5d;
+    --shadow:none;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  background:var(--bg); color:var(--ink);
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Noto Sans KR",system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased; overscroll-behavior-y:none;
+}
+button,input{font:inherit;color:inherit}
+.wrap{max-width:560px;margin:0 auto;padding:calc(12px + env(safe-area-inset-top)) calc(16px + env(safe-area-inset-right)) calc(48px + env(safe-area-inset-bottom)) calc(16px + env(safe-area-inset-left))}
+button,a,.chip{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+.num{font-variant-numeric:tabular-nums}
+.hidden{display:none!important}
+
+/* 상단 */
+.top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:4px 0 14px}
+.brand{font-weight:800;font-size:18px;letter-spacing:-.02em}
+.who{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px;font-size:14px;cursor:pointer}
+.who b{font-weight:700}
+.top-r{display:flex;align-items:center;gap:6px}
+.icon-btn{border:1px solid var(--line);background:var(--surface);border-radius:999px;width:34px;height:34px;font-size:16px;cursor:pointer;color:var(--ink-2);display:grid;place-items:center}
+.icon-btn.spin{animation:spin .6s linear}
+@keyframes spin{to{transform:rotate(360deg)}}
+.av{width:28px;height:28px;border-radius:50%;flex:none;object-fit:cover;background:var(--surface-2);color:var(--ink-2);display:inline-grid;place-items:center;font-size:12px;font-weight:700;overflow:hidden;border:1px solid var(--line)}
+.av.lg{width:52px;height:52px;font-size:20px}
+.av-btn{position:relative;border:0;background:transparent;padding:0;cursor:pointer;flex:none}
+.av-btn .cam{position:absolute;right:-2px;bottom:-2px;width:20px;height:20px;border-radius:50%;background:var(--accent);color:var(--accent-ink);font-size:11px;display:grid;place-items:center;border:2px solid var(--surface)}
+.me-row{display:flex;align-items:center;gap:12px}
+.link-btn{border:0;background:transparent;color:var(--ink-3);font-size:12px;padding:0;cursor:pointer;text-decoration:underline}
+.chip.person{display:inline-flex;align-items:center;gap:6px;padding:4px 12px 4px 4px}
+.install{display:flex;gap:10px;align-items:flex-start;background:var(--accent-soft);border-radius:var(--radius);padding:12px 14px;margin-bottom:12px;font-size:14px;line-height:1.45}
+.install b{font-weight:700}
+.install .x{margin-left:auto;border:0;background:transparent;color:var(--ink-3);font-size:18px;line-height:1;cursor:pointer;padding:0 2px}
+.share-ico{display:inline-block;vertical-align:-3px;width:16px;height:16px}
+.month{display:flex;align-items:center;justify-content:center;gap:4px;margin-bottom:12px}
+.month button{border:0;background:transparent;width:36px;height:36px;border-radius:10px;font-size:20px;color:var(--ink-2);cursor:pointer}
+.month button:hover{background:var(--surface-2)}
+.month button:disabled{opacity:.3;cursor:default;background:transparent}
+.month .label{font-weight:700;font-size:16px;min-width:120px;text-align:center}
+
+/* 카드 */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;margin-bottom:12px}
+.card h2{font-size:14px;font-weight:700;color:var(--ink-2);margin:0 0 12px;display:flex;justify-content:space-between;align-items:baseline}
+.card h2 small{font-weight:500;color:var(--ink-3);font-size:13px}
+
+/* 입력 */
+.amount-row{display:flex;align-items:center;gap:6px;border-bottom:2px solid var(--line);padding-bottom:6px;margin-bottom:12px}
+.amount-row:focus-within{border-color:var(--accent)}
+.amount-row input{flex:1;min-width:0;border:0;background:transparent;font-size:28px;font-weight:800;outline:none;letter-spacing:-.02em}
+.amount-row span{font-size:20px;font-weight:700;color:var(--ink-3)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px;font-size:14px;cursor:pointer;white-space:nowrap}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+.chip.custom{border-style:dashed;color:var(--ink-2)}
+.field{width:100%;border:1px solid var(--line);background:var(--surface-2);border-radius:12px;padding:11px 12px;outline:none;font-size:16px}
+.field:focus{border-color:var(--accent);background:var(--surface)}
+.row{display:flex;gap:8px;margin-top:8px}
+.btn{border:0;border-radius:12px;padding:12px 16px;font-weight:700;cursor:pointer;background:var(--accent);color:var(--accent-ink);white-space:nowrap}
+.btn:disabled{opacity:.5;cursor:default}
+.btn.ghost{background:var(--surface-2);color:var(--ink)}
+.btn.block{width:100%}
+
+/* 히어로 숫자 */
+.hero{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:12px;align-items:center}
+.hero .k{font-size:13px;color:var(--ink-3)}
+.hero .v{font-size:clamp(19px,5.6vw,24px);font-weight:800;letter-spacing:-.02em;white-space:nowrap}
+.hero .s{font-size:13px;color:var(--ink-2)}
+
+/* 막대 목록 (순위·카테고리 공용) */
+.bars{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+.bars li{position:relative}
+.bars .line1{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:5px}
+.bars .name{font-weight:600;display:flex;align-items:center;gap:6px;min-width:0}
+.bars .name span.t{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bars .medal{font-size:16px;width:20px;text-align:center;flex:none}
+.bars .rank{width:20px;text-align:center;color:var(--ink-3);font-size:13px;flex:none}
+.bars .amt{font-weight:700;white-space:nowrap}
+.bars .sub{color:var(--ink-3);font-size:12px;font-weight:500;margin-left:4px}
+.track{height:8px;background:var(--bar-track);border-radius:4px;overflow:hidden}
+.fill{height:100%;background:var(--bar);border-radius:0 4px 4px 0;min-width:4px;transition:width .4s ease}
+.bars li.me .name span.t::after{content:"나";margin-left:6px;font-size:11px;font-weight:700;color:var(--accent);background:var(--accent-soft);border-radius:6px;padding:1px 6px}
+.bars li .tip{position:absolute;right:0;top:-30px;background:var(--ink);color:var(--surface);font-size:12px;padding:4px 8px;border-radius:8px;opacity:0;pointer-events:none;transition:opacity .15s;white-space:nowrap}
+.bars li:hover .tip,.bars li:focus-within .tip{opacity:1}
+
+/* 최근 기록 */
+.recent{list-style:none;margin:0;padding:0}
+.recent li{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--line)}
+.recent li:first-child{border-top:0;padding-top:0}
+.recent .badge{flex:none;font-size:12px;font-weight:600;color:var(--ink-2);background:var(--surface-2);border-radius:8px;padding:3px 8px}
+.recent .mid{flex:1;min-width:0}
+.recent .mid .m1{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.recent .mid .m2{font-size:12px;color:var(--ink-3)}
+.recent .amt{font-weight:700;white-space:nowrap}
+.recent .del{border:0;background:transparent;color:var(--ink-3);cursor:pointer;font-size:13px;padding:4px 6px;border-radius:8px}
+.recent .del.confirm{color:var(--danger);font-weight:700;background:var(--surface-2)}
+
+.empty{color:var(--ink-3);font-size:14px;text-align:center;padding:12px 0}
+.toggle{border:0;background:transparent;color:var(--accent);font-size:13px;font-weight:600;cursor:pointer;padding:0}
+
+/* 잠금·이름 화면 */
+.gate{min-height:80vh;display:flex;flex-direction:column;justify-content:center;gap:10px}
+.gate h1{font-size:24px;margin:0 0 4px;letter-spacing:-.02em}
+.gate p{margin:0 0 10px;color:var(--ink-2)}
+.err{color:var(--danger);font-size:14px;min-height:20px}
+
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--surface);padding:10px 16px;border-radius:12px;font-size:14px;font-weight:600;opacity:0;transition:.2s;pointer-events:none;max-width:calc(100% - 32px)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="install hidden" id="installTip">
+    <div>📲 <b>홈 화면에 추가</b>하면 앱처럼 쓸 수 있어요.<br>
+      아래 <svg class="share-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="공유"><path d="M12 3v12"/><path d="M8 7l4-4 4 4"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>
+      <b>공유</b> 버튼 → <b>홈 화면에 추가</b></div>
+    <button class="x" id="installClose" aria-label="닫기">×</button>
+  </div>
+
+  <!-- 1) 비밀번호 -->
+  <section id="lock" class="gate hidden">
+    <h1>거지방 💸</h1>
+    <p>방 비밀번호를 입력해 주세요.</p>
+    <input id="pw" class="field" type="password" autocomplete="current-password" placeholder="방 비밀번호">
+    <div class="err" id="pwErr"></div>
+    <button class="btn block" id="pwBtn">들어가기</button>
+  </section>
+
+  <!-- 2) 이름 고르기 -->
+  <section id="pick" class="gate hidden">
+    <h1>누구세요?</h1>
+    <p>한 번 고르면 이 폰에서는 계속 기억해요.</p>
+    <div class="chips" id="memberChips"></div>
+    <div class="row">
+      <input id="newName" class="field" maxlength="20" placeholder="새 이름 입력">
+      <button class="btn" id="nameBtn">시작</button>
+    </div>
+    <div class="err" id="nameErr"></div>
+  </section>
+
+  <!-- 3) 메인 -->
+  <main id="app" class="hidden">
+    <div class="top">
+      <div class="brand">거지방</div>
+      <div class="top-r">
+        <button class="icon-btn" id="refreshBtn" aria-label="새로고침">↻</button>
+        <button class="who" id="whoBtn" title="이름 바꾸기"><b id="whoName"></b> · 변경</button>
+      </div>
+    </div>
+
+    <div class="month">
+      <button id="prevM" aria-label="이전 달">‹</button>
+      <div class="label num" id="monthLabel"></div>
+      <button id="nextM" aria-label="다음 달">›</button>
+    </div>
+
+    <section class="card" id="addCard">
+      <h2>지출 추가</h2>
+      <div class="amount-row">
+        <input id="amt" class="num" inputmode="numeric" placeholder="0" autocomplete="off">
+        <span>원</span>
+      </div>
+      <div class="chips" id="catChips"></div>
+      <input id="customCat" class="field hidden" maxlength="20" placeholder="카테고리 직접 입력">
+      <div class="row">
+        <input id="memo" class="field" maxlength="100" placeholder="메모 (예: 햄버거)">
+        <button class="btn" id="addBtn">추가</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="hero">
+        <div class="me-row">
+          <button class="av-btn" id="myAvBtn" aria-label="프로필 사진 바꾸기"><span id="myAv"></span><span class="cam">📷</span></button>
+          <div><div class="k">내 지출</div><div class="v num" id="myTotal">0원</div><div class="s"><span id="myCount"></span> <button class="link-btn hidden" id="avDel">사진 지우기</button></div></div>
+        </div>
+        <div><div class="k">우리방 합계</div><div class="v num" id="roomTotal">0원</div><div class="s" id="roomCount"></div></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>순위 <small id="rankNote"></small></h2>
+      <ul class="bars" id="rankList"></ul>
+    </section>
+
+    <section class="card">
+      <h2>내 카테고리 통계 <small id="topCat"></small></h2>
+      <ul class="bars" id="catList"></ul>
+    </section>
+
+    <section class="card">
+      <h2>최근 기록 <button class="toggle" id="onlyMine" aria-pressed="false">내 것만</button></h2>
+      <ul class="recent" id="recentList"></ul>
+    </section>
+  </main>
+</div>
+<input type="file" id="avFile" accept="image/*" class="hidden">
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+  const CATS = ["음식", "카페", "교통", "쇼핑", "술", "생활", "기타"];
+  const $ = id => document.getElementById(id);
+  const won = n => Number(n).toLocaleString("ko-KR") + "원";
+  const store = {
+    get(k){ try { return localStorage.getItem(k) || ""; } catch { return ""; } },
+    set(k,v){ try { localStorage.setItem(k, v); } catch {} },
+    del(k){ try { localStorage.removeItem(k); } catch {} },
+  };
+  const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+
+  let pw = store.get("room_pw");
+  let me = store.get("me_name");
+  let cat = CATS[0];
+  let onlyMine = false;
+  let data = null;
+  let avatarMap = {};
+  function avatarEl(name, big){
+    const src = avatarMap[name];
+    if (src) { const i = el("img", "av" + (big ? " lg" : "")); i.src = src; i.alt = ""; return i; }
+    return el("span", "av" + (big ? " lg" : ""), (name || "?").trim().charAt(0));
+  }
+  const now = new Date();
+  const thisMonth = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,"0")}`;
+  let month = thisMonth;
+
+  function show(id){ ["lock","pick","app"].forEach(x => $(x).classList.toggle("hidden", x !== id)); }
+  function toast(msg){ const t=$("toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove("show"),1800); }
+
+  async function api(path, opts = {}){
+    const res = await fetch(path, { ...opts, headers: { "Content-Type":"application/json", "X-Room-Password": pw, ...(opts.headers||{}) } });
+    if (res.status === 401) { store.del("room_pw"); pw = ""; show("lock"); throw new Error("비밀번호가 틀렸어요."); }
+    const body = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(body.detail || "오류가 났어요.");
+    return body;
+  }
+
+  // ── 잠금 ──
+  async function tryLogin(){
+    const v = $("pw").value.trim(); if (!v) return;
+    pw = v; $("pwErr").textContent = ""; $("pwBtn").disabled = true;
+    try { await api("/api/login", { method:"POST" }); store.set("room_pw", pw); await afterLogin(); }
+    catch(e){ $("pwErr").textContent = e.message; }
+    finally { $("pwBtn").disabled = false; }
+  }
+  $("pwBtn").onclick = tryLogin;
+  $("pw").onkeydown = e => { if (e.key === "Enter") tryLogin(); };
+
+  // ── 이름 ──
+  async function showPicker(){
+    show("pick");
+    const box = $("memberChips"); box.replaceChildren();
+    try {
+      const d = await api(`/api/summary?month=${month}`);
+      if (!d.members.length) box.append(el("div","empty","아직 기록이 없어요. 이름을 입력해서 시작하세요."));
+      avatarMap = d.avatars || {};
+      d.members.forEach(n => { const b = el("button","chip person"); b.append(avatarEl(n), el("span",null,n)); b.onclick = () => setMe(n); box.append(b); });
+    } catch(e){ $("nameErr").textContent = e.message; }
+  }
+  function setMe(n){
+    n = n.trim().replace(/\s+/g," ");
+    if (!n || n.length > 20) { $("nameErr").textContent = "이름은 1~20자로 해주세요."; return; }
+    me = n; store.set("me_name", me); $("nameErr").textContent = ""; startApp();
+  }
+  $("nameBtn").onclick = () => setMe($("newName").value);
+  $("newName").onkeydown = e => { if (e.key === "Enter") setMe($("newName").value); };
+  $("whoBtn").onclick = showPicker;
+
+  // ── 카테고리 칩 ──
+  function renderCats(){
+    const box = $("catChips"); box.replaceChildren();
+    [...CATS, "+ 직접"].forEach(c => {
+      const custom = c === "+ 직접";
+      const b = el("button", "chip" + (custom ? " custom" : ""), c);
+      const active = custom ? $("customCat").classList.contains("hidden") === false : (cat === c && $("customCat").classList.contains("hidden"));
+      b.setAttribute("aria-pressed", String(active));
+      b.onclick = () => {
+        if (custom) { $("customCat").classList.remove("hidden"); $("customCat").focus(); }
+        else { cat = c; $("customCat").classList.add("hidden"); }
+        renderCats();
+      };
+      box.append(b);
+    });
+  }
+
+  // ── 금액 입력: 숫자만, 천단위 콤마 ──
+  $("amt").addEventListener("input", e => {
+    const digits = e.target.value.replace(/[^\d]/g, "").slice(0, 9);
+    e.target.value = digits ? Number(digits).toLocaleString("ko-KR") : "";
+  });
+
+  async function addExpense(){
+    const amount = Number($("amt").value.replace(/[^\d]/g, ""));
+    if (!amount) { toast("금액을 입력해 주세요"); $("amt").focus(); return; }
+    const category = !$("customCat").classList.contains("hidden") ? ($("customCat").value.trim() || "기타") : cat;
+    $("addBtn").disabled = true;
+    try {
+      await api("/api/expenses", { method:"POST", body: JSON.stringify({ name: me, amount, category, memo: $("memo").value }) });
+      $("amt").value = ""; $("memo").value = "";
+      toast(`${won(amount)} [${category}] 기록했어요`);
+      if (month !== thisMonth) month = thisMonth;
+      await load();
+    } catch(e){ toast(e.message); }
+    finally { $("addBtn").disabled = false; }
+  }
+  $("addBtn").onclick = addExpense;
+  $("memo").onkeydown = e => { if (e.key === "Enter") addExpense(); };
+
+  // ── 월 이동 ──
+  function shiftMonth(d){
+    let [y,m] = month.split("-").map(Number); m += d;
+    if (m < 1) { m = 12; y--; } if (m > 12) { m = 1; y++; }
+    month = `${y}-${String(m).padStart(2,"0")}`; load();
+  }
+  $("prevM").onclick = () => shiftMonth(-1);
+  $("nextM").onclick = () => shiftMonth(1);
+  $("onlyMine").onclick = () => { onlyMine = !onlyMine; $("onlyMine").setAttribute("aria-pressed", String(onlyMine)); $("onlyMine").textContent = onlyMine ? "전체 보기" : "내 것만"; renderRecent(); };
+
+  // ── 그리기 ──
+  function barItem({ lead, name, amount, sub, ratio, tip, isMe, avatar }){
+    const li = el("li", isMe ? "me" : "");
+    li.tabIndex = 0;
+    const l1 = el("div","line1");
+    const nm = el("div","name"); if (lead) nm.append(lead); if (avatar) nm.append(avatar); nm.append(el("span","t",name));
+    const a = el("div","amt num",won(amount)); if (sub) a.append(el("span","sub",sub));
+    l1.append(nm, a);
+    const tr = el("div","track"); const f = el("div","fill"); f.style.width = Math.max(ratio*100, 1) + "%"; tr.append(f);
+    li.append(l1, tr, el("div","tip",tip));
+    return li;
+  }
+
+  function render(){
+    const [y,m] = data.month.split("-");
+    $("monthLabel").textContent = `${y}년 ${Number(m)}월`;
+    $("nextM").disabled = data.month >= thisMonth;
+    $("whoName").textContent = me;
+    renderCats();
+
+    avatarMap = data.avatars || {};
+    $("myAv").replaceChildren(avatarEl(me, true));
+    $("avDel").classList.toggle("hidden", !avatarMap[me]);
+    $("myTotal").textContent = won(data.me.total);
+    $("myCount").textContent = `${data.me.count}건`;
+    $("roomTotal").textContent = won(data.room_total);
+    $("roomCount").textContent = `${data.ranking.length}명 참여`;
+
+    // 순위
+    const rl = $("rankList"); rl.replaceChildren();
+    const maxR = Math.max(1, ...data.ranking.map(r => r.total));
+    const medals = ["🥇","🥈","🥉"];
+    $("rankNote").textContent = data.ranking.length ? "많이 쓴 순" : "";
+    if (!data.ranking.length) rl.append(el("li","empty","이 달 기록이 아직 없어요"));
+    data.ranking.forEach((r,i) => {
+      const lead = i < 3 ? el("span","medal",medals[i]) : el("span","rank",String(i+1));
+      const share = data.room_total ? Math.round(r.total / data.room_total * 100) : 0;
+      rl.append(barItem({ lead, name:r.name, amount:r.total, ratio:r.total/maxR, isMe:r.name===me, avatar: avatarEl(r.name),
+        tip:`${r.count}건 · 우리방의 ${share}%` }));
+    });
+
+    // 내 카테고리
+    const cl = $("catList"); cl.replaceChildren();
+    const cats = data.me.categories;
+    $("topCat").textContent = cats.length ? `최다: ${cats[0].category}` : "";
+    if (!cats.length) cl.append(el("li","empty","이 달 내 기록이 없어요"));
+    const maxC = Math.max(1, ...cats.map(c => c.total));
+    cats.forEach(c => {
+      const pct = Math.round(c.total / data.me.total * 100);
+      cl.append(barItem({ lead: null, name:c.category, amount:c.total, sub:`${pct}%`, ratio:c.total/maxC,
+        tip:`${c.count}건 · 평균 ${won(Math.round(c.total/c.count))}` }));
+    });
+
+    renderRecent();
+  }
+
+  function renderRecent(){
+    const ul = $("recentList"); ul.replaceChildren();
+    const rows = data.recent.filter(r => !onlyMine || r.name === me);
+    if (!rows.length) { ul.append(el("li","empty","기록이 없어요")); return; }
+    rows.forEach(r => {
+      const li = el("li");
+      const d = new Date(r.created_at);
+      const when = `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`;
+      const mid = el("div","mid");
+      mid.append(el("div","m1", r.memo || r.category), el("div","m2", `${r.name} · ${when}`));
+      li.append(el("span","badge",r.category), mid, el("div","amt num",won(r.amount)));
+      if (r.name === me) {
+        const del = el("button","del","삭제");
+        del.onclick = async () => {
+          if (!del.classList.contains("confirm")) { del.classList.add("confirm"); del.textContent = "정말?"; setTimeout(()=>{ del.classList.remove("confirm"); del.textContent="삭제"; }, 3000); return; }
+          try { await api(`/api/expenses/${r.id}?name=${encodeURIComponent(me)}`, { method:"DELETE" }); toast("삭제했어요"); load(); }
+          catch(e){ toast(e.message); }
+        };
+        li.append(del);
+      }
+      ul.append(li);
+    });
+  }
+
+  async function load(){
+    try { data = await api(`/api/summary?month=${month}&me=${encodeURIComponent(me)}`); render(); }
+    catch(e){ if (pw) toast(e.message); }
+  }
+
+  function startApp(){ show("app"); load(); }
+  async function afterLogin(){ if (me) startApp(); else showPicker(); }
+
+  document.addEventListener("visibilitychange", () => { if (!document.hidden && me && pw && !$("app").classList.contains("hidden")) load(); });
+
+  // ── 프로필 사진 ──
+  $("myAvBtn").onclick = () => $("avFile").click();
+  $("avFile").onchange = async e => {
+    const file = e.target.files[0]; e.target.value = "";
+    if (!file) return;
+    try {
+      const url = URL.createObjectURL(file);
+      const img = await new Promise((ok, bad) => { const i = new Image(); i.onload = () => ok(i); i.onerror = bad; i.src = url; });
+      const side = Math.min(img.naturalWidth, img.naturalHeight), S = 320;
+      const c = document.createElement("canvas"); c.width = c.height = S;
+      c.getContext("2d").drawImage(img, (img.naturalWidth-side)/2, (img.naturalHeight-side)/2, side, side, 0, 0, S, S);
+      URL.revokeObjectURL(url);
+      await api("/api/avatar", { method:"PUT", body: JSON.stringify({ name: me, image: c.toDataURL("image/jpeg", 0.85) }) });
+      toast("프사를 바꿨어요"); load();
+    } catch(err){ toast(err.message && err.message !== "[object Event]" ? err.message : "사진을 읽지 못했어요"); }
+  };
+  $("avDel").onclick = async () => {
+    try { await api(`/api/avatar?name=${encodeURIComponent(me)}`, { method:"DELETE" }); toast("사진을 지웠어요"); load(); }
+    catch(e){ toast(e.message); }
+  };
+
+  // ── 홈 화면 앱 ──
+  const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  const standalone = window.navigator.standalone === true || matchMedia("(display-mode: standalone)").matches;
+  if (isIOS && !standalone && !store.get("install_tip_closed")) $("installTip").classList.remove("hidden");
+  $("installClose").onclick = () => { $("installTip").classList.add("hidden"); store.set("install_tip_closed", "1"); };
+  $("refreshBtn").onclick = () => { const b=$("refreshBtn"); b.classList.remove("spin"); void b.offsetWidth; b.classList.add("spin"); load(); };
+
+  // 시작
+  if (!pw) show("lock");
+  else api("/api/login", { method:"POST" }).then(afterLogin).catch(() => show("lock"));
+})();
+</script>
+</body>
+</html>
