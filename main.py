@@ -24,8 +24,10 @@ from sqlalchemy.dialects.sqlite import insert as sqlite_insert
 # ── DB ────────────────────────────────────────────────────────────
 # 로컬: SQLite / 배포: Supabase·Neon 등 Postgres URL을 DATABASE_URL에 넣으면 됨
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./expense.db")
-if DATABASE_URL.startswith("postgres://"):  # 일부 호스팅이 주는 구형 스킴 보정
-    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+# Postgres 주소는 psycopg(v3) 드라이버를 쓰도록 스킴 통일
+for _old in ("postgres://", "postgresql://"):
+    if DATABASE_URL.startswith(_old):
+        DATABASE_URL = "postgresql+psycopg://" + DATABASE_URL[len(_old):]
 
 engine = create_engine(DATABASE_URL, pool_pre_ping=True)
 meta = MetaData()
